@@ -10,7 +10,7 @@ function foo() {
 foo()
 
 // 使用axios
-axios.get('http://123.207.32.32:9002/lyric?id=1842025914a').then(res => {
+axios.get('http://123.207.32.32:9002/').then(res => {
   console.log(res)
 })
 

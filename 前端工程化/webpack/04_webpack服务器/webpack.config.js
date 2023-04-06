@@ -26,7 +26,7 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         },
-        changeOrigin: true
+        changeOrigin: true // 改变http请求头中的host的值，绕过服务器的校验
       }
     },
     historyApiFallback: true

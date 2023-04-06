@@ -8,6 +8,7 @@ const { merge } = require('webpack-merge')
 const devConfig = require('./dev.config')
 const prodConfig = require('./prod.config')
 
+// 使用speedMeasurePlugin插件，对我们的打包结果进行测量
 const smp = new SpeedMeasurePlugin()
 
 const getCommonConfig = function(isProdution) {
@@ -79,7 +80,7 @@ const getCommonConfig = function(isProdution) {
         dayjs: 'dayjs'
       })
     ]
-  }  
+  }
 }
 
 
