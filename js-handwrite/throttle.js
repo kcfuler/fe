@@ -7,9 +7,8 @@ function throttle(fn, delay) {
         open = true; // 函数执行完成之后才会开始打开阀门
       }, delay);
       open = false;
-    }
-    else {
+    } else {
       return false;
     }
-  }
+  };
 }
