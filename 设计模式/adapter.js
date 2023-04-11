@@ -28,3 +28,49 @@ class Adaptee {
 const adapter = new Adapter();
 adapter.specificRequest();
 adapter.targetInterface();
+
+// from gpt
+
+// 旧的API
+function oldApiRequest(url, data, callback) {
+  // 处理请求
+  const response = { result: "success" };
+
+  // 调用回调函数
+  callback(response);
+}
+
+// 新的API
+class NewApiRequest {
+  constructor() {}
+
+  sendRequest(url, payload) {
+    return new Promise((resolve, reject) => {
+      // 处理请求
+      const response = { result: "success" };
+
+      // 返回Promise
+      resolve(response);
+    });
+  }
+}
+
+// 适配器
+class ApiAdapter {
+  constructor() {}
+
+  request(url, data, callback) {
+    if (typeof callback === "function") {
+      oldApiRequest(url, data, callback);
+    } else {
+      const newApiRequest = new NewApiRequest();
+      newApiRequest.sendRequest(url, data).then(callback);
+    }
+  }
+}
+
+// 使用适配器
+const apiAdapter = new ApiAdapter();
+apiAdapter.request("/api/data", { foo: "bar" }, (response) =>
+  console.log(response)
+);
