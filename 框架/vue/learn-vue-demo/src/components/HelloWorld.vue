@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref, watch} from 'vue'
 
 defineProps<{ msg: string }>()
 
 const count = ref(0)
+const obj = reactive({ count: 0 })
+
+watch(count, (val, oldVal) => {
+  console.log('count changed to', val)
+  console.log('old count was', oldVal);
+})
 </script>
 
 <template>
