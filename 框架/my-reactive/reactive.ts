@@ -3,7 +3,7 @@ type Observer = {
   dependencies: Set<Set<Observer>>;
 };
 
-const context = new Array<Observer>(); // 用于存储当前正在执行的函数
+let context = new Array<Observer>(); // 用于存储当前正在执行的函数
 
 // 处理分支切换的问题
 function cleanup(observer: Observer) {
@@ -11,9 +11,21 @@ function cleanup(observer: Observer) {
     subscriptions.delete(observer);
 }
 
+// 让事件和响应式变量也建立联系
 function subscribe(observer: Observer, subscriptions: Set<Observer>) {
   subscriptions.add(observer);
   observer.dependencies.add(subscriptions);
+}
+
+// 利用分支切换时的cleanup函数
+// 在没有上下文的前提下执行一遍函数，函数就不会和响应式变量建立联系
+export function unTrack(fn: Function) {
+  const prevContext = context;
+  context = [];
+  const res = fn();
+  context = prevContext;
+
+  return res;
 }
 
 // every signals is dependent on the context
@@ -47,4 +59,11 @@ export function createEffect(fn: Function) {
     dependencies: new Set<Set<Observer>>(),
   };
   effect.execute();
+}
+
+export function createMemo(fn: Function) {
+  const [signal, setSignal] = createSignal<Function>(() => {});
+  createEffect(() => setSignal(fn()));
+
+  return signal;
 }
