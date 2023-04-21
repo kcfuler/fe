@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draggable Element</title>
+    <style>
+      #draggable {
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+        position: absolute;
+        cursor: move;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="draggable"></div>
+    <script>
+      const draggableElement = document.getElementById("draggable");
+      draggableElement.addEventListener("mousedown", (event) => {
+        // 记录⿏标按下时的位置
+        let startX = event.clientX;
+        let startY = event.clientY;
+        // 计算⿏标相对于元素的位置
+        let offsetX = startX - draggableElement.offsetLeft;
+        let offsetY = startY - draggableElement.offsetTop;
+        // 处理⿏标移动事件
+        const onMouseMove = (event) => {
+          // 计算⿏标移动的距离
+          // let deltaX = event.clientX - startX;
+          // let deltaY = event.clientY - startY;
+          // 更新元素的位置
+          draggableElement.style.left = `${event.clientX - offsetX}px`;
+          draggableElement.style.top = `${event.clientY - offsetY}px`;
+        };
+        // 处理⿏标松开事件
+        const onMouseUp = () => {
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        };
+        // 添加事件监听器
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+      });
+    </script>
+  </body>
+</html>
