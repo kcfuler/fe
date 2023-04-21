@@ -1,16 +1,25 @@
 import { useState } from "react";
 import "./App.css";
+import { TestLifeCycle } from "./draft/TestLifeCycle";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  setCount((v) => v + 1);
+  const [counter, setCounter] = useState(0);
+  const [isShow, setIsShow] = useState(true);
 
   return (
     <>
-      <h1>this is the count {count}</h1>
-      <button onClick={() => setCount((v) => v + 1)}> + </button>
-      <button onClick={() => setCount((v) => v - 1)}> - </button>
+      <h1>there is App</h1>
+      <h2>this is app counter : {counter}</h2>
+      <button onClick={() => setCounter((counter) => counter + 1)}>
+        {" "}
+        在 App 里面 ++
+      </button>
+      <button onClick={() => setIsShow((v) => !v)}>
+        toggle the TestLifeCycle show
+      </button>
+
+      <p>--------------------------------------------------</p>
+      {isShow ? <TestLifeCycle counter={counter} /> : null}
     </>
   );
 }
