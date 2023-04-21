@@ -16,11 +16,28 @@ export const TestLifeCycle: FC<IProp> = memo(
       };
     }, [props]);
 
+    useEffect(() => {
+      console.log("在useEffect看counter:", counter);
+    }, [counter]);
+
     return (
       <>
         <h1>counter equals {counter} </h1>
         <button onClick={() => setCounter((v) => v + 1)}> + </button>
         <button onClick={() => setCounter((v) => v - 1)}> - </button>
+        <button
+          onClick={() => {
+            setCounter((v) => v + 1);
+            setCounter((v) => v + 1);
+            setCounter((v) => v + 1);
+            setCounter((v) => v + 1);
+            setCounter((v) => v + 1);
+            setCounter((v) => v + 1);
+          }}
+        >
+          {" "}
+          batch add{" "}
+        </button>
       </>
     );
   },
