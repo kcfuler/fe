@@ -1,8 +1,8 @@
 let obj = {
-  name: "zhangsan",
+  name: "张三",
   age: 18,
 };
-Proxy(obj, {
+let p = new Proxy(obj, {
   get(target, key, receiver) {
     console.log("get", key);
     return Reflect.get(target, key, receiver);
@@ -12,3 +12,5 @@ Proxy(obj, {
     return Reflect.set(target, key, value, receiver);
   },
 });
+
+console.log(p.name);
