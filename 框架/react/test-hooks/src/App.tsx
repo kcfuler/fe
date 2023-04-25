@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { TestLifeCycle } from "./draft/TestLifeCycle";
+import { TestIcon } from "./draft/TestIcon";
 
 function App() {
   const [counter, setCounter] = useState(0);
@@ -20,6 +21,9 @@ function App() {
 
       <p>--------------------------------------------------</p>
       {isShow ? <TestLifeCycle counter={counter} /> : null}
+
+      <p>--------------------------------------------------</p>
+      <TestIcon></TestIcon>
     </>
   );
 }

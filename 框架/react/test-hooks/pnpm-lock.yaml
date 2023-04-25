@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  iconoir-react:
+    specifier: ^6.6.0
+    version: registry.npmmirror.com/iconoir-react@6.6.0(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: registry.npmmirror.com/react@18.2.0
@@ -6160,6 +6163,17 @@ packages:
     version: 2.1.0
     engines: {node: '>=10.17.0'}
     dev: true
+
+  registry.npmmirror.com/iconoir-react@6.6.0(react@18.2.0):
+    resolution: {integrity: sha512-7ueB0jQlSZFjEa4qUCaGbfWLRjGBtOc0E+RYHEb3Ek3zDwQuNh4VLtV9kwGoiATRfBYVv8bgCmXI0nr52TRXsw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/iconoir-react/-/iconoir-react-6.6.0.tgz}
+    id: registry.npmmirror.com/iconoir-react/6.6.0
+    name: iconoir-react
+    version: 6.6.0
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
+    dependencies:
+      react: registry.npmmirror.com/react@18.2.0
+    dev: false
 
   registry.npmmirror.com/iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/iconv-lite/-/iconv-lite-0.4.24.tgz}
