@@ -1,5 +1,5 @@
 // 简单实现
-function anti_shake(fn, delay) {
+function debounce(fn, delay) {
   let timer = null;
   return function () {
     // 这里需要普通形式的函数来得到参数对象
@@ -9,5 +9,3 @@ function anti_shake(fn, delay) {
     }, delay);
   };
 }
-
-// 添加立即执行功能
