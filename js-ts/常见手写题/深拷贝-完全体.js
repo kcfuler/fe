@@ -1,4 +1,4 @@
-function deepCloneComplete(target, map){
+function _completeDeepClone(target, map){
   if( typeof target !== 'object' || target === null){
     return target;
   }
@@ -13,8 +13,10 @@ function deepCloneComplete(target, map){
   const result = Array.isArray(target)? [] : {};
   for( let key in target ){
     if( target.hasOwnProperty(key)){
-      result[key] = deepCloneComplete(target[key], map);
+      result[key] = _completeDeepClone(target[key], map);
     }
   }
   return result;
 }
+
+_completeDeepClone({a:1, b:2, c:3}, new Map());
