@@ -1,4 +1,5 @@
 function flat(arr, depth) {
+  // 返回条件
   if (!Array.isArray(arr) || depth <= 0) {
     return arr;
   }
@@ -11,4 +12,4 @@ function flat(arr, depth) {
   }, []);
 }
 
-console.log(flat([1, [2, [3, [4, [5]]]]], 3));
+console.log(flat([1, [2, [3, [4, [5]]]]], 5));
