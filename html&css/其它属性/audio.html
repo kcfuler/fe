@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    audio {
+      /* 设置音量大小为 0.5 */
+      --volume: 0.5;
+      /* 设置音频播放速度为 2 */
+      --playback-rate: 2;
+      /* 设置音频播放状态为暂停 */
+      --play-state: paused;
+    }
+
+    audio::before {
+      content: "点击播放";
+    }
+
+    audio[controls] {
+      /* 隐藏默认控制条 */
+      display: none;
+    }
+
+    audio[controls]::after {
+      content: "正在播放";
+    }
+
+    audio[controls]:hover::before {
+      content: "";
+    }
+
+    audio[controls]:hover {
+      /* 显示自定义控制条 */
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 20px;
+      background-color: #eee;
+      cursor: pointer;
+    }
+
+    audio[controls]:hover::after {
+      content: "";
+    }
+
+    audio[controls]:hover::before {
+      content: "点击暂停";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    audio[controls]:hover progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #ccc;
+    }
+
+    audio[controls]:hover progress::-webkit-progress-value {
+      background-color: #f00;
+    }
+
+    audio[controls]:hover progress::-webkit-progress-bar {
+      background-color: #fff;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb {
+      position: relative;
+      top: -9px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: #fff;
+      cursor: pointer;
+      -webkit-appearance: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-runnable-track {
+      height: 2px;
+      background-color: #ccc;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb:hover {
+      background-color: #f00;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb:active {
+      background-color: #f00;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-moz-range-thumb {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-moz-range-track {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-moz-range-progress {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-moz-range-track {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-ms-thumb {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-ms-track {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-ms-fill-lower {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-ms-fill-upper {
+      display: none;
+    }
+
+    audio[controls]:hover::-webkit-slider-thumb::-ms-tooltip {
+      display: none;
+    }
+    .text-letter::first-letter {
+      font-size: 2em;
+      color: red;
+    }
+
+    .text-letter::first-line {
+      font-size: 2em;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<audio src="audio.mp3" controls>
+  Your browser does not support the audio element.
+</audio>
+<ul>
+  <li>列表项 1</li>
+  <li style="display: list-item;">列表项 2</li>
+  <li>列表项 3</li>
+</ul>
+
+<div style="display: list-item"> 测试列表项 </div>
+
+<div class="text-letter">
+  Good !
+</div>
+</body>
+</html>
