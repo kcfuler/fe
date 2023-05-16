@@ -1,18 +1,33 @@
 {
-  "name": "mini-umi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "name": "mini-umi~",
+  "version": "0.0.1",
+  "description": "a mini system service core",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "bin": {
+    "service-core": "./bin/service.js"
+  },
   "scripts": {
-    "dev": "father dev",
-    "build:all": "pnpm run -r build" 
+    "build": "turbo run build ",
+    "publish:all": "pnpm run -r publish:all",
+    "build:deps": "father prebundle",
+    "prepublishOnly": "father doctor && npm run build",
+    "buildExample": " cd examples/vue3 && npm run build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "father": "^4.1.9",
-    "typescript": "^5.0.4"
+  "authors": [
+    "洋"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist",
+    "compiled"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "father": "^4.0.7",
+    "turbo": "^1.6.3"
   }
 }

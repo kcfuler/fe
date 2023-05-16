@@ -1,0 +1,8 @@
+node_modules
+dist
+.DS_Store
+.mini-umi
+.turbo
+.mini-umi-ssr
+auto-imports.d.ts
+components.d.ts
