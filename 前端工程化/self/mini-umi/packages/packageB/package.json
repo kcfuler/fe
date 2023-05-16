@@ -1,0 +1,14 @@
+{
+  "name": "packageB",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "father dev",
+    "build": "father build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

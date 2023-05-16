@@ -1,13 +1,21 @@
 {
-  "name": "first-demo",
-  "version": "1.0.0",
+  "name": "first-demo-kcfuler-1",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "/dist/index.js",
+  "bin": {
+    "kcfuler": "/bin/kcfuler.js"
+  },
+  "files": [
+    "/dist",
+    "/bin"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev":"tsc --watch",
+    "build": "tsc --target es5"
   },
   "keywords": [],
-  "author": "",
+  "author": "kcfuler",
   "license": "ISC",
   "dependencies": {
     "typescript": "^5.0.4"
