@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,6 +9,21 @@
   <body>
     <div id="app"></div>
     <my-element></my-element>
+    <my-shadow-element></my-shadow-element>
+
+    <template id="my-template">
+      <div>Hello from a template</div>
+    </template>
+
+    <my-template-element></my-template-element>
+
+    <popup-info
+      img="img/alt.png"
+      text="Your card validation code (CVC)
+            is an extra security feature — it is the last 3 or 4 numbers on the
+            back of your card."
+    ></popup-info>
+
     <script type="module" src="/main.js"></script>
   </body>
 </html>
