@@ -1,0 +1,19 @@
+{
+  "name": "front-learn",
+  "version": "1.0.0",
+  "description": "to record some interview question",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/node-learn",
+    "packages/html-css-learn",
+    "packages/js-learn",
+    "packages/frontend-toolings",
+    "packages/algorithm",
+    "packages/framework-learn"
+  ]
+}
