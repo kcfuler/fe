@@ -1,0 +1,30 @@
+name: Update README # 定义此工作流的名称
+
+on:
+  pull_request: # 当有pull request事件发生时触发此工作流
+    types: [closed] # 只有当PR被关闭时才触发
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest # 定义运行此job的虚拟环境，这里使用的是最新的Ubuntu
+
+    if: github.event.pull_request.merged == true # 如果PR被合并，则执行下面的步骤，否则跳过
+
+    steps:
+      - name: Check out code # 步骤名称
+        uses: actions/checkout@v2 # 使用GitHub官方的checkout action来检出代码
+
+      - name: Update README.md # 步骤名称
+        run: | # 运行以下命令
+          # 向README.md添加一条新记录，包含PR编号、提交者和合并日期
+          echo "PR #${{ github.event.pull_request.number }} by ${{ github.event.pull_request.user.login }} was merged on $(date +'%Y-%m-%d')." >> README.md
+
+      - name: Commit and push # 步骤名称
+        run: | # 运行以下命令
+          # 设置git的用户邮箱和用户名
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          # 提交README.md的更改
+          git commit -am "Update README with PR info"
+          # 推送更改回仓库
+          git push

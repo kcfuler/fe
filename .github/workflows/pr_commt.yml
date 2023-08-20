@@ -1,0 +1,21 @@
+name: PR Commenter # 定义此工作流的名称
+
+on:
+  pull_request: # 当有pull request事件发生时触发此工作流
+    types: [opened] # 只有当PR被打开时才触发
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest # 定义运行此job的虚拟环境，这里使用的是最新的Ubuntu
+
+    steps:
+      - name: Comment on PR # 步骤名称
+        run: | # 运行以下命令
+          PR_COMMENT="请检查 @Reviewer" # 定义要发表的评论内容
+          # 使用curl命令通过GitHub API在PR下发表评论
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \ # 使用GitHub为你提供的token进行身份验证
+            -H "Accept: application/vnd.github.v3+json" \  # 定义API版本
+            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \  # API的URL，用于添加评论
+            -d "{\"body\":\"$PR_COMMENT\"}"  # 设置请求的body部分，即评论内容
