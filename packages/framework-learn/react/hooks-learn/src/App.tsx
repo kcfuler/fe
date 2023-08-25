@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import useLatest from "./hooks/useLatest";
 
 function App() {
   const [count, setCount] = useState(0);
+  const ref = useLatest(count);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("count", count);
-      setCount((count) => count + 1);
+      setCount(ref.current + 1);
     }, 1000);
 
     return () => clearInterval(interval);
