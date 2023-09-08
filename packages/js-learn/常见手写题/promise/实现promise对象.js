@@ -2,6 +2,10 @@ const PENDING = "pending";
 const FULFILLED = "fulfilled";
 const REJECTED = "rejected";
 
+/*
+  实现异步调用，在浏览器中是通过 queueMicrotask, nodejs 中是通过 process.nextTick() 来实现
+*/
+
 class MyPromise {
   constructor(executor) {
     this.state = PENDING;
