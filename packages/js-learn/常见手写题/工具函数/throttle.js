@@ -1,14 +1,12 @@
-function throttle(fn, delay) {
-  let open = true;
-  return function () {
-    if (open) {
-      setTimeout(() => {
-        fn.apply(this, arguments);
-        open = true; // 函数执行完成之后才会开始打开阀门
+function throttle(func, delay) {
+  let timer = null;
+
+  return (...args) => {
+    if (!timer) {
+      timer = setTimeout(() => {
+        func(...args);
+        timer = null;
       }, delay);
-      open = false;
-    } else {
-      return false;
     }
   };
 }
