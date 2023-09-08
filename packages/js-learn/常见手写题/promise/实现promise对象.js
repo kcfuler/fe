@@ -36,20 +36,46 @@ class MyPromise {
   
 
   then = (onFulfilled, onRejected) => {
-    if (this.state === FULFILLED) {
-      onFulfilled(this.value);  
-    }
-    if (this.state === REJECTED) {
-      onRejected(this.reason);
-    }
-    if (this.state === PENDING) {
-      this.onFulfilledCallbacks.push(() => {
-        onFulfilled(this.value);
-      })
-      this.onRejectedCallbacks.push(() => {
-        onRejected(this.reason);
-      })
-    }
+    return new MyPromise((resolve, reject) => {
+      if (this.state === FULFILLED) {
+        try {
+          const x = onFulfilled(this.value);
+          resolve(x);
+        } catch(err) {
+          reject(err);
+        }
+      }
+
+      if (this.state === REJECTED) {
+        try {
+          const x = onRejected(this.reason);
+          resolve(x);
+        } catch(err) {
+          reject(err);
+        }
+      }
+
+      if (this.state === PENDING) {
+        this.onFulfilledCallbacks.push(() => {
+          try {
+            const x = onFulfilled(this.value);
+            resolve(x);
+          } catch(err) {
+            reject(err);
+          }
+        });
+
+        this.onRejectedCallbacks.push(() => {
+          try {
+            const x = onRejected(this.reason);
+            resolve(x);
+          } catch(err) {
+            reject(err);
+          }
+        });
+      }
+    })
+
   }
 
   catch = (onRejected) => {
@@ -83,4 +109,22 @@ myPromise.then((value) => {
 // 第三个成功回调
 myPromise.then((value) => {
   console.log("Third then:", value);
+});
+
+console.log('second test -------------------');
+console.log('');
+
+new MyPromise((resolve, reject) => {
+  resolve(1);
+})
+.then(result => {
+  console.log(result);  // 输出 1
+  return result + 1;
+})
+.then(result => {
+  console.log(result);  // 输出 2
+  return result + 1;
+})
+.then(result => {
+  console.log(result);  // 输出 3
 });
