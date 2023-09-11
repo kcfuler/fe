@@ -11,6 +11,12 @@ const curry = function (fn) {
   };
 };
 
+function sum(...args) {
+  return args.reduce((prev, cur) => prev + cur, 0);
+}
+
+console.log(curry(sum)(1)(1)(2)(2)(3)());
+
 function sumThree(a, b, c) {
   return a + b + c;
 }
