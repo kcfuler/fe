@@ -60,6 +60,7 @@ function resumeUpload() {
   if (uploadedChunksJSON) {
     uploadedChunks = JSON.parse(uploadedChunksJSON);
   }
+  // 补充恢复上传的逻辑
 }
 
 // 注册上传事件
