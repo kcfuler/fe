@@ -1,46 +1,65 @@
 import java.util.*;
 
 public class draft {
-  public int[][] updateMatrix(int[][] mat) {
-    if (mat == null || mat.length == 0 || mat[0].length == 0) {
-      return mat;
+  public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+      val = x;
     }
+  }
 
-    int rows = mat.length;
-    int cols = mat[0].length;
-    int[][] dist = new int[rows][cols];
-    Queue<int[]> queue = new LinkedList<>();
+  Map<TreeNode, TreeNode> parentsMap = new HashMap<>();
 
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        if (mat[i][j] == 0) {
-          dist[i][j] = 0;
-          queue.offer(new int[] { i, j });
-        } else {
-          dist[i][j] = rows + cols;
+  public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+    createParentMap(root, null);
+
+    Queue<TreeNode> que = new LinkedList<>();
+    Set<TreeNode> visited = new HashSet<>();
+
+    que.offer(target);
+    visited.add(target);
+
+    int depth = 0;
+    while (!que.isEmpty()) {
+      // 返回结果
+      if (depth == k) {
+        List<Integer> res = new ArrayList<>();
+        for (TreeNode node : que) {
+          res.add(node.val);
+        }
+        return res;
+      }
+
+      int size = que.size();
+      while (size-- > 0) {
+        TreeNode curNode = que.poll();
+
+        if (curNode.left != null && visited.add(curNode.left)) {
+          que.offer(curNode.left);
+        }
+        if (curNode.right != null && visited.add(curNode.right)) {
+          que.offer(curNode.right);
+        }
+
+        TreeNode parentNode = parentsMap.get(curNode);
+        if (parentNode != null && visited.add(parentNode)) {
+          que.offer(parentNode);
         }
       }
+      depth++;
     }
 
-    int[][] dirs = new int[][] { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-    while (!queue.isEmpty()) {
-      int[] position = queue.poll();
-      int x = position[0];
-      int y = position[1];
+    return new ArrayList<>();
+  }
 
-      for (int[] dir : dirs) {
-        int nx = x + dir[0];
-        int ny = y + dir[1];
-
-        if (nx >= 0 && ny >= 0 && nx < rows && ny < cols) {
-          if (dist[nx][ny] > dist[x][y] + 1) {
-            dist[nx][ny] = dist[x][y] + 1;
-            queue.offer(new int[] { nx, ny });
-          }
-        }
-      }
+  public void createParentMap(TreeNode node, TreeNode parent) {
+    if (node != null) {
+      parentsMap.put(node, parent);
+      createParentMap(node.left, node);
+      createParentMap(node.right, node);
     }
-
-    return dist;
   }
 }
