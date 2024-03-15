@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popstate Event Test</title>
+    <script>
+        window.addEventListener('load', () => {
+            // 监听 popstate 事件
+            window.addEventListener('popstate', (event) => {
+                // 显示当前状态和相关信息
+                console.log('event', event)
+            });
+
+            // 绑定按钮点击事件来添加历史状态
+            document.getElementById('push-state').addEventListener('click', () => {
+                const newState = { additionalInfo: 'New state at ' + new Date().toLocaleTimeString() };
+                // 添加新状态到历史记录
+                history.pushState(newState, '', '');
+            });
+
+            document.getElementById('replace-state').addEventListener('click', () => {
+                const newState = { additionalInfo: 'Replaced state at ' + new Date().toLocaleTimeString() };
+                // 替换当前状态
+                history.replaceState(newState, '', '');
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Popstate Event Test</h1>
+<button id="push-state">Push State</button>
+<button id="replace-state">Replace State</button>
+</body>
+</html>

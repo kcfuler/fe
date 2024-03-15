@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lazy Loading Images Demo</title>
+  </head>
+  <body>
+    <div class="container">
+      <!-- 确保替换 'path_to_your_image' 为实际图片路径 -->
+      <img
+        class="lazy"
+        src="loading.gif"
+        data-src="path_to_your_image/pic1.png"
+      />
+      <img
+        class="lazy"
+        src="loading.gif"
+        data-src="path_to_your_image/pic2.png"
+      />
+      <img
+        class="lazy"
+        src="loading.gif"
+        data-src="path_to_your_image/pic3.png"
+      />
+      <!-- 添加更多图片如果需要 -->
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        if ("IntersectionObserver" in window) {
+          let lazyImageObserver = new IntersectionObserver(function (
+            entries,
+            observer
+          ) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                let lazyImage = entry.target;
+                lazyImage.src = lazyImage.dataset.src;
+                lazyImage.classList.remove("lazy");
+                lazyImageObserver.unobserve(lazyImage);
+              }
+            });
+          });
+          lazyImages.forEach(function (lazyImage) {
+            lazyImageObserver.observe(lazyImage);
+          });
+        } else {
+          // Fallback for browsers that don't support IntersectionObserver
+          // Immediately load all images if IntersectionObserver is not supported
+          lazyImages.forEach(function (lazyImage) {
+            lazyImage.src = lazyImage.dataset.src;
+            lazyImage.classList.remove("lazy");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

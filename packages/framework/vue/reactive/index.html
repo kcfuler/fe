@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const bucket = new WeakMap();
+
+      const data = {
+        text: "hello world",
+      };
+
+      let activeEffect = null;
+      function createEffect(fn) {
+        activeEffect = fn;
+        fn();
+      }
+
+      const obj = new Proxy(data, {
+        // 读取时添加副作用
+        get(target, key) {
+          if (!activeEffect) return target[key];
+          let depsMap = bucket.get(target); // 对象<=>桶
+          if (!depsMap) {
+            bucket.set(target, (depsMap = new Map()));
+          }
+          let deps = depsMap.get(key); // 属性 <=> effect
+          if (!deps) {
+            depsMap.set(key, (deps = new Set()));
+          }
+          deps.add(activeEffect);
+        },
+
+        // 修改的时候执行副作用
+        set(target, key, newVal) {
+          target[key] = newVal;
+          const depsMap = bucket.get(target);
+          if (!depsMap) return;
+          const effects = depsMap.get(key);
+          effects &&
+            effects.forEach((fn) => {
+              fn();
+            });
+          return true;
+        },
+      });
+
+      createEffect(() => {
+        document.body.innerText = obj.text;
+      });
+
+      setTimeout(() => {
+        obj.text = "hello vue3!";
+        console.log("execute edit", data);
+      }, 3000);
+    </script>
+  </body>
+</html>
