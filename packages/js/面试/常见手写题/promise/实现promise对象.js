@@ -7,100 +7,102 @@ const REJECTED = "rejected";
 */
 
 class MyPromise {
-  constructor(executor) {
-    this.state = PENDING;
-    this.value = undefined;
-    this.reason = undefined;
-    this.onFulfilledCallbacks = [];
-    this.onRejectedCallbacks = [];
+    constructor(executor) {
+        this.state = PENDING;
+        this.value = undefined;
+        this.reason = undefined;
+        this.onFulfilledCallbacks = [];
+        this.onRejectedCallbacks = [];
 
-    const resolve = (value) => {
-      process.nextTick(() => {
-        if (this.state === PENDING) {
-          this.state = FULFILLED;
-          this.value = value;
-          this.onFulfilledCallbacks.forEach((fn) => fn());
+        const resolve = (value) => {
+            process.nextTick(() => {
+                if (this.state === PENDING) {
+                    this.state = FULFILLED;
+                    this.value = value;
+                    this.onFulfilledCallbacks.forEach((fn) => fn());
+                }
+            });
+        };
+
+        const reject = (reason) => {
+            process.nextTick(() => {
+                if (this.state === PENDING) {
+                    this.state = REJECTED;
+                    this.reason = reason;
+                    this.onRejectedCallbacks.forEach((fn) => fn());
+                }
+            });
+        };
+
+        try {
+            executor(resolve, reject);
+        } catch (err) {
+            reject(err);
         }
-      });
+    }
+
+    then = (onFulfilled, onRejected) => {
+        return new MyPromise((resolve, reject) => {
+            switch (this.state) {
+                case FULFILLED: {
+                    process.nextTick(() => {
+                        try {
+                            const x = onFulfilled(this.value);
+                            resolve(x);
+                        } catch (err) {
+                            reject(err);
+                        }
+                    });
+                    return
+                }
+                case REJECTED: {
+                    process.nextTick(() => {
+                        try {
+                            const x = onRejected(this.reason);
+                            resolve(x);
+                        } catch (err) {
+                            reject(err);
+                        }
+                    });
+                    return;
+                }
+                case PENDING: {
+                    this.onFulfilledCallbacks.push(() => {
+                        process.nextTick(() => {
+                            try {
+                                const x = onFulfilled(this.value);
+                                resolve(x);
+                            } catch (err) {
+                                reject(err)
+                            }
+                        })
+                    })
+
+                    this.onRejectedCallbacks.push(() => {
+                        process.nextTick(() => {
+                            try {
+                                const x = onRejected(this.reason);
+                                resolve(x);
+                            } catch (err) {
+                                reject(err);
+                            }
+                        })
+                    })
+                }
+            }
+        });
     };
 
-    const reject = (reason) => {
-      process.nextTick(() => {
-        if (this.state === PENDING) {
-          this.state = REJECTED;
-          this.reason = reason;
-          this.onRejectedCallbacks.forEach((fn) => fn());
+    catch = (onRejected) => {
+        if (this.state === REJECTED) {
+            onRejected(this.reason);
         }
-      });
+        if (this.state === PENDING) {
+            this.onRejectedCallbacks.push(() => {
+                onRejected(this.reason);
+            });
+        }
     };
-
-    try {
-      executor(resolve, reject);
-    } catch (err) {
-      reject(err);
-    }
-  }
-
-  then = (onFulfilled, onRejected) => {
-    return new MyPromise((resolve, reject) => {
-      if (this.state === FULFILLED) {
-        process.nextTick(() => {
-          try {
-            const x = onFulfilled(this.value);
-            resolve(x);
-          } catch (err) {
-            reject(err);
-          }
-        });
-      }
-
-      if (this.state === REJECTED) {
-        process.nextTick(() => {
-          try {
-            const x = onRejected(this.reason);
-            resolve(x);
-          } catch (err) {
-            reject(err);
-          }
-        });
-      }
-
-      if (this.state === PENDING) {
-        this.onFulfilledCallbacks.push(() => {
-          process.nextTick(() => {
-            try {
-              const x = onFulfilled(this.value);
-              resolve(x);
-            } catch (err) {
-              reject(err);
-            }
-          });
-        });
-
-        this.onRejectedCallbacks.push(() => {
-          process.nextTick(() => {
-            try {
-              const x = onRejected(this.reason);
-              resolve(x);
-            } catch (err) {
-              reject(err);
-            }
-          });
-        });
-      }
-    });
-  };
-
-  catch = (onRejected) => {
-    if (this.state === REJECTED) {
-      onRejected(this.reason);
-    }
-    if (this.state === PENDING) {
-      this.onRejectedCallbacks.push(() => {
-        onRejected(this.reason);
-      });
-    }
-  };
 }
 
 // // test
