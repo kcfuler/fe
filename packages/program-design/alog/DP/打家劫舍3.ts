@@ -1,4 +1,4 @@
-import {TreeNode} from "../数据结构/二叉树/types";
+import {TreeNode} from "../数据结构/二叉树/ts/types";
 
 /*
 * 1. 二叉树遍历
