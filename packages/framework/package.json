@@ -10,5 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "vite": "^4.4.9"
-  }
+  },
+  "repository": "git@github.com:kcfuler/frontend-learn.git"
 }
