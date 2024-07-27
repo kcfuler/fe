@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parallax Scrolling Effect</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+      }
+
+      .parallax-container {
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        perspective: 1px;
+      }
+
+      .parallax-layer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      .parallax-background {
+        transform: translateZ(-1px) scale(2);
+        background-image: url("https://source.unsplash.com/random/1600x900?nature");
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      h1 {
+        font-size: 4rem;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      p {
+        font-size: 1.5rem;
+        max-width: 600px;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .scroll-content {
+        min-height: 100vh;
+        background-color: #333;
+        color: #fff;
+        padding: 50px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parallax-container">
+      <div class="parallax-layer parallax-background"></div>
+      <div class="parallax-layer content">
+        <h1>Parallax Scrolling</h1>
+        <p>
+          Scroll down to see the parallax effect. The background image moves at
+          a different speed than the foreground content, creating a 3D-like
+          effect.
+        </p>
+      </div>
+    </div>
+    <div class="scroll-content">
+      <h2>Additional Content</h2>
+      <p>
+        This is some additional content to allow for scrolling. The parallax
+        effect is most noticeable when scrolling up and down the page.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor,
+        nunc id aliquam tincidunt, nisl nunc tincidunt nunc, vitae aliquam nunc
+        nunc vitae nunc. Sed euismod, nunc id aliquam tincidunt, nisl nunc
+        tincidunt nunc, vitae aliquam nunc nunc vitae nunc.
+      </p>
+      <p>Scroll back up to see the parallax effect again!</p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const parallaxBackground = document.querySelector(
+          ".parallax-background"
+        );
+        const content = document.querySelector(".content");
+
+        window.addEventListener("scroll", function () {
+          const scrollPosition = window.pageYOffset;
+          parallaxBackground.style.transform = `translateZ(-1px) scale(2) translateY(${
+            scrollPosition * 0.5
+          }px)`;
+          content.style.transform = `translateY(${scrollPosition * 0.8}px)`;
+        });
+      });
+    </script>
+  </body>
+</html>

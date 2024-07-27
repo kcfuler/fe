@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multilayer Parallax Scrolling Effect</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+        overflow-x: hidden;
+        overflow-y: auto;
+        perspective: 1px;
+        transform-style: preserve-3d;
+      }
+
+      .parallax-container {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .parallax-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transform-style: preserve-3d;
+      }
+
+      .parallax-background {
+        transform: translateZ(-3px) scale(4);
+        background-image: url("https://source.unsplash.com/random/1600x900?sky");
+      }
+
+      .parallax-middle {
+        transform: translateZ(-2px) scale(3);
+        background-image: url("https://source.unsplash.com/random/1600x900?mountains");
+        opacity: 0.7;
+      }
+
+      .parallax-foreground {
+        transform: translateZ(-1px) scale(2);
+        background-image: url("https://source.unsplash.com/random/1600x900?trees");
+        opacity: 0.6;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        transform: translateZ(0);
+      }
+
+      h1 {
+        font-size: 4rem;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      p {
+        font-size: 1.5rem;
+        max-width: 600px;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .scroll-content {
+        position: relative;
+        min-height: 100vh;
+        background-color: #333;
+        color: #fff;
+        padding: 50px;
+        box-sizing: border-box;
+      }
+
+      .cloud,
+      .bird {
+        position: absolute;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      .cloud {
+        width: 200px;
+        height: 100px;
+      }
+
+      .cloud1 {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path fill="white" d="M0 50 Q50 0 100 50 T200 50 L200 100 L0 100 Z"/></svg>');
+        top: 10%;
+        left: 10%;
+      }
+
+      .cloud2 {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path fill="white" d="M0 50 Q50 30 100 50 T200 50 L200 100 L0 100 Z"/></svg>');
+        top: 30%;
+        right: 20%;
+      }
+
+      .bird {
+        width: 50px;
+        height: 50px;
+      }
+
+      .bird1 {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path fill="black" d="M25 0 L50 50 L0 50 Z"/></svg>');
+        top: 15%;
+        left: 25%;
+      }
+
+      .bird2 {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path fill="black" d="M0 0 L50 0 L25 50 Z"/></svg>');
+        top: 45%;
+        right: 15%;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .cloud,
+      .bird {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .cloud2,
+      .bird2 {
+        animation-delay: 3s;
+      }
+
+      @media (max-width: 768px) {
+        .parallax-background {
+          transform: translateZ(-2px) scale(3);
+        }
+        .parallax-middle {
+          transform: translateZ(-1px) scale(2);
+        }
+        .parallax-foreground {
+          transform: translateZ(-0.5px) scale(1.5);
+        }
+        h1 {
+          font-size: 2.5rem;
+        }
+        p {
+          font-size: 1rem;
+          max-width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parallax-container">
+      <div class="parallax-layer parallax-background"></div>
+      <div class="parallax-layer parallax-middle">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+      </div>
+      <div class="parallax-layer parallax-foreground">
+        <div class="bird bird1"></div>
+        <div class="bird bird2"></div>
+      </div>
+      <div class="content">
+        <h1>Multilayer Parallax</h1>
+        <p>
+          Scroll down to experience the enhanced parallax effect with multiple
+          layers, floating clouds, and flying birds.
+        </p>
+      </div>
+    </div>
+    <div class="scroll-content">
+      <h2>Additional Content</h2>
+      <p>
+        This is some additional content to allow for more scrolling. The
+        parallax effect is most noticeable when scrolling up and down the page.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor,
+        nunc id aliquam tincidunt, nisl nunc tincidunt nunc, vitae aliquam nunc
+        nunc vitae nunc. Sed euismod, nunc id aliquam tincidunt, nisl nunc
+        tincidunt nunc, vitae aliquam nunc nunc vitae nunc.
+      </p>
+      <p>Scroll back up to see the parallax effect again!</p>
+    </div>
+
+    <script>
+      document.addEventListener("scroll", function () {
+        const scrollPosition = window.pageYOffset;
+        document.querySelector(
+          ".parallax-background"
+        ).style.transform = `translateZ(-3px) scale(4) translateY(${
+          scrollPosition * 0.3
+        }px)`;
+        document.querySelector(
+          ".parallax-middle"
+        ).style.transform = `translateZ(-2px) scale(3) translateY(${
+          scrollPosition * 0.2
+        }px)`;
+        document.querySelector(
+          ".parallax-foreground"
+        ).style.transform = `translateZ(-1px) scale(2) translateY(${
+          scrollPosition * 0.1
+        }px)`;
+      });
+    </script>
+  </body>
+</html>
