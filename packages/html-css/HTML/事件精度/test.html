@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Precision Test - RAF vs setTimeout</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Event Precision Test - RAF vs setTimeout</h1>
+    <button id="testButton">Start Test</button>
+    <div id="results"></div>
+
+    <script>
+      const button = document.getElementById("testButton");
+      const results = document.getElementById("results");
+
+      button.addEventListener("click", () => {
+        const iterations = 1000;
+        const rafTimings = [];
+        const setTimeoutTimings = [];
+
+        function runRAFTest(callback) {
+          const start = performance.now();
+          requestAnimationFrame(() => {
+            const end = performance.now();
+            rafTimings.push(end - start);
+            if (rafTimings.length < iterations) {
+              runRAFTest(callback);
+            } else {
+              callback();
+            }
+          });
+        }
+
+        function runSetTimeoutTest(callback) {
+          const start = performance.now();
+          setTimeout(() => {
+            const end = performance.now();
+            setTimeoutTimings.push(end - start);
+            if (setTimeoutTimings.length < iterations) {
+              runSetTimeoutTest(callback);
+            } else {
+              callback();
+            }
+          }, 0);
+        }
+
+        runRAFTest(() => {
+          runSetTimeoutTest(() => {
+            displayResults(rafTimings, setTimeoutTimings);
+          });
+        });
+      });
+
+      function calculateStats(timings) {
+        const average =
+          timings.reduce((sum, time) => sum + time, 0) / timings.length;
+        const min = Math.min(...timings);
+        const max = Math.max(...timings);
+        const median = timings.sort((a, b) => a - b)[
+          Math.floor(timings.length / 2)
+        ];
+        return { average, min, max, median };
+      }
+
+      function displayResults(rafTimings, setTimeoutTimings) {
+        const rafStats = calculateStats(rafTimings);
+        const setTimeoutStats = calculateStats(setTimeoutTimings);
+
+        results.innerHTML = `
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>requestAnimationFrame</th>
+                        <th>setTimeout</th>
+                    </tr>
+                    <tr>
+                        <td>Average</td>
+                        <td>${rafStats.average.toFixed(3)} ms</td>
+                        <td>${setTimeoutStats.average.toFixed(3)} ms</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>${rafStats.min.toFixed(3)} ms</td>
+                        <td>${setTimeoutStats.min.toFixed(3)} ms</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>${rafStats.max.toFixed(3)} ms</td>
+                        <td>${setTimeoutStats.max.toFixed(3)} ms</td>
+                    </tr>
+                    <tr>
+                        <td>Median</td>
+                        <td>${rafStats.median.toFixed(3)} ms</td>
+                        <td>${setTimeoutStats.median.toFixed(3)} ms</td>
+                    </tr>
+                </table>
+            `;
+      }
+    </script>
+  </body>
+</html>
