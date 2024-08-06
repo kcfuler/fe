@@ -1,12 +1,8 @@
-interface MyMinHeapItem {
-  value: number;
-}
-
-class MyMinHeap<T extends MyMinHeapItem> {
+class MyMinHeap<T> {
   heap: T[];
   capacity: number;
   constructor(capacity: number) {
-    this.heap = new Array(capacity);
+    this.heap = new Array();
     this.capacity = capacity;
   }
 
@@ -44,39 +40,42 @@ class MyMinHeap<T extends MyMinHeapItem> {
     while (true) {
       let left = this.left(cur);
       let right = this.right(cur);
+      let smallest = cur;
 
-      if (left >= this.capacity || right >= this.capacity) {
+      if (this.heap[smallest] > this.heap[left]) {
+        smallest = left;
+      }
+      if (this.heap[smallest] > this.heap[right]) {
+        smallest = right;
+      }
+
+      if (smallest !== cur) {
+        this.swap(cur, smallest);
+        cur = smallest;
+      } else {
         break;
-      }
-
-      if (this.heap[i] > this.heap[left]) {
-        this.swap(left, i);
-        i = left;
-      }
-      if (this.heap[i] > this.heap[right]) {
-        this.swap(right, i);
-        i = right;
       }
     }
   }
 
   addItem(newItem: T) {
-    if (this.heap.length + 1 >= this.capacity) {
+    if (this.heap.length >= this.capacity) {
       return false;
     }
     this.heap.push(newItem);
     this.shiftUp(this.heap.length - 1);
   }
 
-  extractItem(): T | false {
+  extractItem(): T | null {
     if (this.heap.length < 1) {
-      return false;
+      return null;
     }
 
     this.swap(0, this.heap.length - 1);
+    const item = this.heap.pop()!;
     this.shiftDown(0);
 
-    return this.heap.pop()!;
+    return item;
   }
 
   getHeap() {
@@ -84,9 +83,15 @@ class MyMinHeap<T extends MyMinHeapItem> {
   }
 }
 
-const heap = new MyMinHeap(100);
-for (let i = 0; i < 100; i++) {
-  heap.addItem({ value: Math.random() * 100 });
+const heap = new MyMinHeap<number>(10);
+for (let i = 0; i < 10; i++) {
+  heap.addItem(Math.random() * 10);
 }
 
-console.log("heap", heap.getHeap());
+while (true) {
+  let item = heap.extractItem();
+  if (!item) {
+    break;
+  }
+  console.log("item", item);
+}
