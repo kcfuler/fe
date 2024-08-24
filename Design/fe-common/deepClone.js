@@ -15,6 +15,7 @@ function deepClone(target, map = new WeakMap()) {
     Map: (v, m) =>
       new Map(Array.from(v, ([key, val]) => [key, deepClone(val, m)])),
     Set: (v, m) => new Set(Array.from(v, (val) => deepClone(val, m))),
+    ArrayBuffer: (v) => v.slice(),
   };
 
   const constructorName = target.constructor.name;
