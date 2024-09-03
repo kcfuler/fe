@@ -1,34 +1,35 @@
-async function concurrentUpload(files, uploadFn, options) {
+/**
+ * 整体思路：
+ *  通过Promise.race()实现超时控制
+ *  通过循环 + return 实现重试机制
+ *  通过 concurrency 控制并发数，通过 Promise.all() 等待所有任务完成
+ */
+async function concurrentUpload(files, uploadFn, options = {}) {
   const {
     concurrency = 3,
     retries = 3,
-    retryDelay = 1000,
     timeout = 30000,
+    retryDelay = 1000,
   } = options;
 
-  // 按顺序返回
   const results = new Array(files.length);
-  // 任务队列
-  const queue = files.map((file, index) => ({
-    file,
-    index,
-  }));
+  const queue = files.map((file, index) => ({ file, index }));
 
-  // 一次上传任务
   async function upload({ file, index }) {
     let lastError;
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
-        const res = await Promise.race([
-          uploadFn(file),
+        const uploadPromise = uploadFn(file);
+        const result = await Promise.race([
+          uploadPromise,
           new Promise((_, reject) =>
             setTimeout(() => reject(new Error("Upload timeout")), timeout)
           ),
         ]);
-        results[index] = { file, result: res, success: true };
-        return;
-      } catch (e) {
-        lastError = e;
+        results[index] = { file, result, success: true };
+        return; // 成功上传，退出重试循环
+      } catch (error) {
+        lastError = error;
         if (attempt < retries) {
           console.warn(
             `Attempt ${attempt + 1} failed for ${
@@ -36,9 +37,11 @@ async function concurrentUpload(files, uploadFn, options) {
             }, retrying in ${retryDelay}ms...`
           );
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
+          // 这里不需要额外的操作，循环会自动进行下一次尝试
         }
       }
     }
+    // 所有重试都失败后，记录最后一次的错误
     results[index] = { file, error: lastError, success: false };
     console.error(
       `Failed to upload ${file.name} after ${retries + 1} attempts:`,
@@ -48,7 +51,7 @@ async function concurrentUpload(files, uploadFn, options) {
 
   async function processQueue() {
     while (queue.length > 0) {
-      const item = queue.pop();
+      const item = queue.shift();
       await upload(item);
     }
   }
