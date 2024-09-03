@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List Web Component</title>
+  </head>
+  <body>
+    <todo-list></todo-list>
+
+    <script>
+      // Todo List Component
+      class TodoList extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+        }
+
+        connectedCallback() {
+          this.render();
+          this.addEventListener("todo-added", this.addTodo);
+          this.addEventListener("todo-removed", this.removeTodo);
+        }
+
+        render() {
+          this.shadowRoot.innerHTML = `
+                    <style>
+                        :host {
+                            display: block;
+                            font-family: Arial, sans-serif;
+                            max-width: 300px;
+                            margin: 0 auto;
+                        }
+                        input, button {
+                            margin: 5px;
+                            padding: 5px;
+                        }
+                    </style>
+                    <h2>Todo List</h2>
+                    <input type="text" id="new-todo">
+                    <button id="add-todo">Add Todo</button>
+                    <ul id="todo-list"></ul>
+                `;
+
+          this.shadowRoot
+            .querySelector("#add-todo")
+            .addEventListener("click", () => {
+              const input = this.shadowRoot.querySelector("#new-todo");
+              if (input.value.trim()) {
+                this.dispatchEvent(
+                  new CustomEvent("todo-added", { detail: input.value.trim() })
+                );
+                input.value = "";
+              }
+            });
+        }
+
+        addTodo(e) {
+          const todoList = this.shadowRoot.querySelector("#todo-list");
+          const todoItem = document.createElement("todo-item");
+          todoItem.textContent = e.detail;
+          todoList.appendChild(todoItem);
+        }
+
+        removeTodo(e) {
+          e.target.remove();
+        }
+      }
+
+      // Todo Item Component
+      class TodoItem extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+        }
+
+        connectedCallback() {
+          this.render();
+        }
+
+        render() {
+          this.shadowRoot.innerHTML = `
+                    <style>
+                        :host {
+                            display: block;
+                            margin: 10px 0;
+                            padding: 5px;
+                            background-color: #f0f0f0;
+                            border-radius: 5px;
+                        }
+                        button {
+                            margin-left: 10px;
+                            cursor: pointer;
+                        }
+                    </style>
+                    <li>
+                        <span>${this.textContent}</span>
+                        <button>Remove</button>
+                    </li>
+                `;
+
+          this.shadowRoot
+            .querySelector("button")
+            .addEventListener("click", () => {
+              this.dispatchEvent(
+                new CustomEvent("todo-removed", {
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            });
+        }
+      }
+
+      customElements.define("todo-list", TodoList);
+      customElements.define("todo-item", TodoItem);
+    </script>
+  </body>
+</html>
