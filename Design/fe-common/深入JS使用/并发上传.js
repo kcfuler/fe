@@ -2,7 +2,7 @@
  * 整体思路：
  *  通过Promise.race()实现超时控制
  *  通过循环 + return 实现重试机制
- *  通过 concurrency 控制并发数，通过 Promise.all() 等待所有任务完成
+ *  通过 concurrency 控制并发数，processQueue 调度并发队列，通过 Promise.all() 等待所有任务完成
  */
 async function concurrentUpload(files, uploadFn, options = {}) {
   const {
