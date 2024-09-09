@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>内存泄漏测试页面</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+      button {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+      }
+      #stats {
+        margin-top: 20px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>内存泄漏测试页面</h1>
+    <button id="grow">增加内存占用</button>
+    <button id="gc">尝试垃圾回收</button>
+    <div id="stats">
+      DOM元素数量: <span id="domCount">0</span><br />
+      估计内存使用: <span id="memoryUsage">0</span> MB
+    </div>
+
+    <script>
+      var x = [];
+      var domCount = 0;
+
+      function grow() {
+        for (var i = 0; i < 10000; i++) {
+          document.body.appendChild(document.createElement("div"));
+          domCount++;
+        }
+        x.push(new Array(1000000).join("x"));
+        updateStats();
+      }
+
+      function updateStats() {
+        document.getElementById("domCount").textContent = domCount;
+        if (performance.memory) {
+          var memoryUsage = Math.round(
+            performance.memory.usedJSHeapSize / (1024 * 1024)
+          );
+          document.getElementById("memoryUsage").textContent = memoryUsage;
+        } else {
+          document.getElementById("memoryUsage").textContent = "不可用";
+        }
+      }
+
+      function attemptGC() {
+        if (window.gc) {
+          window.gc();
+          console.log("垃圾回收已尝试执行");
+        } else {
+          console.log("垃圾回收不可用");
+        }
+        updateStats();
+      }
+
+      document.getElementById("grow").addEventListener("click", grow);
+      document.getElementById("gc").addEventListener("click", attemptGC);
+
+      // 初始更新统计信息
+      updateStats();
+    </script>
+  </body>
+</html>
