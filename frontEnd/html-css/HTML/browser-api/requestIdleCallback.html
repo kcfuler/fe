@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestIdleCallback 示例</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #output {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>requestIdleCallback 示例</h1>
+      <button id="startButton">开始任务</button>
+      <div id="output"></div>
+    </div>
+
+    <script>
+      const outputDiv = document.getElementById("output");
+      const startButton = document.getElementById("startButton");
+
+      function log(message) {
+        outputDiv.innerHTML += message + "<br>";
+      }
+
+      function simulateHeavyTask() {
+        const start = Date.now();
+        while (Date.now() - start < 50) {
+          // 模拟耗时操作
+        }
+      }
+
+      function performTasks(deadline) {
+        console.log("params", deadline, deadline.timeRemaining());
+        while (deadline.timeRemaining() > 0) {
+          simulateHeavyTask();
+          log(
+            `执行任务 - 剩余时间：${deadline
+              .timeRemaining()
+              .toFixed(2)}ms，是否超时：${deadline.didTimeout}`
+          );
+        }
+
+        if (deadline.didTimeout) {
+          log("任务因超时而被中断");
+        }
+
+        // 模拟还有更多任务要做
+        requestIdleCallback(performTasks, { timeout: 1000 });
+      }
+
+      startButton.addEventListener("click", () => {
+        outputDiv.innerHTML = ""; // 清空之前的输出
+        log("开始执行任务...");
+        requestIdleCallback(performTasks, { timeout: 1000 });
+      });
+    </script>
+  </body>
+</html>
