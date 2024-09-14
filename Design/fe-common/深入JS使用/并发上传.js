@@ -20,6 +20,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
         const uploadPromise = uploadFn(file);
+        // race 实现超时逻辑
         const result = await Promise.race([
           uploadPromise,
           new Promise((_, reject) =>
@@ -36,6 +37,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
               file.name
             }, retrying in ${retryDelay}ms...`
           );
+          // 延迟重试
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
           // 这里不需要额外的操作，循环会自动进行下一次尝试
         }
@@ -49,6 +51,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
     );
   }
 
+  // 模拟线程并发，不同线程消费同一个任务队列
   async function processQueue() {
     while (queue.length > 0) {
       const item = queue.shift();
@@ -57,6 +60,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
   }
 
   const workers = Array(concurrency).fill().map(processQueue);
+  // 并发
   await Promise.all(workers);
 
   return results;

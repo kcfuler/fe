@@ -10,6 +10,19 @@ const curry = (fn) => {
   }
 };
 
+// 可以实现无限个参数
+const curryInfinite = (fn) => {
+  const param = [];
+  return function inner(...args) {
+    param.concat(args);
+    if (param.length >= fn || args.length === 0) {
+      return fn(...param);
+    } else {
+      return inner;
+    }
+  };
+};
+
 // 不是递归，更像状态机
 curry.placeholder = Symbol();
 const curryWithPlaceHolder = (fn) => {
