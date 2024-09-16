@@ -10,7 +10,7 @@ if (cluster.isMaster) {
     cluster.fork();
   }
 
-  console.log("cluster", cluster);
+  // console.log("cluster", cluster);
 
   cluster.on("exit", (worker, code, signal) => {
     console.log(`工作进程 ${worker.process.pid} 已退出`);
