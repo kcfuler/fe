@@ -17,7 +17,7 @@ class Loader {
         max: 3,
         delay: 500,
       },
-    }
+    },
   ) {
     this.options = options;
     this.tasks = [];
@@ -35,8 +35,8 @@ class Loader {
     const loadTask = async (task, index) => {
       for (let i = 0; i < max; i++) {
         try {
-          const res = await task();
-          this.results[index] = res;
+          this.results[index] = await task();
+
           break;
         } catch (e) {
           if (i === max - 1) {
@@ -118,7 +118,7 @@ async function runTests() {
           } else {
             resolve("console.log('Retry succeeded')");
           }
-        })
+        }),
     );
 
     await loader.execute();
@@ -148,7 +148,7 @@ async function runTests() {
     console.log("Execution order:", order);
     console.assert(
       JSON.stringify(order) === JSON.stringify([1, 2, 3]),
-      "Execution order is correct"
+      "Execution order is correct",
     );
   }
 
@@ -166,3 +166,45 @@ async function runTests() {
 
 // 运行测试
 runTests();
+
+/**
+ * 1. 尽快执行
+ * 2. 错误处理
+ */
+class Loader1 {
+  constructor(options) {
+    this.options = options;
+    this.results = [];
+    this.index = 0;
+  }
+
+  add(task) {
+    return new Promise(async (resolve, reject) => {
+      const taskIndex = this.index++;
+      let err = null;
+      const { retry } = this.options;
+
+      for (let i = 0; i < retry.max; i++) {
+        try {
+          err = null;
+          this.results[taskIndex] = await task();
+          resolve(taskIndex);
+        } catch (e) {
+          err = e;
+          await new Promise((resolve) => setTimeout(resolve, retry.delay));
+        }
+      }
+      if (err) {
+        reject(err);
+      }
+    });
+  }
+
+  tryRun() {
+    // 直接遍历result数组，从前到后能执行就执行
+  }
+
+  runCode() {
+    // 执行
+  }
+}
