@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeakRef Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+        }
+
+        #status {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>WeakRef API Test</h1>
+<button id="open">Open Popup</button>
+<button id="close">Close Popup</button>
+<button id="check">Check Popup Status</button>
+<div id="status"></div>
+
+<script>
+    let popup;
+    const statusDiv = document.getElementById('status');
+
+    document.getElementById('open').onclick = () => {
+        popup = new WeakRef(window.open('login.html', 'LoginWindow', 'width=300,height=300'));
+        // popup = window.open('login.html', 'LoginWindow', 'width=300,height=300');
+        statusDiv.textContent = 'Popup opened';
+    };
+
+    document.getElementById('close').onclick = () => {
+        const win = popup?.deref();
+        if (win && !win.closed) {
+            win.close();
+            statusDiv.textContent = 'Popup closed';
+        } else {
+            statusDiv.textContent = 'No popup to close';
+        }
+    };
+
+    document.getElementById('check').onclick = () => {
+        const win = popup?.deref();
+        if (win && !win.closed) {
+            statusDiv.textContent = 'Popup is open';
+        } else {
+            statusDiv.textContent = 'Popup is closed or not available';
+        }
+    };
+</script>
+</body>
+</html>
