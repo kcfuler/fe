@@ -12,6 +12,7 @@
  * ps: 暂时不处理异步任务
  * */
 
+// @ts-ignore
 import * as process from "node:process";
 
 /**
@@ -112,7 +113,7 @@ class MyPromise {
 
 function resolvePromise(resolve: Task, reject: Task, x: any) {
   // 检测循环调用
-  if (x === resolve || x === reject) {
+  if (x === resolve) {
     return reject(new TypeError(""));
   }
   // 处理 then 中返回 promise 的情况
