@@ -24,7 +24,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
         const result = await Promise.race([
           uploadPromise,
           new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Upload timeout")), timeout)
+            setTimeout(() => reject(new Error("Upload timeout")), timeout),
           ),
         ]);
         results[index] = { file, result, success: true };
@@ -35,7 +35,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
           console.warn(
             `Attempt ${attempt + 1} failed for ${
               file.name
-            }, retrying in ${retryDelay}ms...`
+            }, retrying in ${retryDelay}ms...`,
           );
           // 延迟重试
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -47,7 +47,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
     results[index] = { file, error: lastError, success: false };
     console.error(
       `Failed to upload ${file.name} after ${retries + 1} attempts:`,
-      lastError
+      lastError,
     );
   }
 
@@ -59,7 +59,7 @@ async function concurrentUpload(files, uploadFn, options = {}) {
     }
   }
 
-  const workers = Array(concurrency).fill().map(processQueue);
+  const workers = Array(concurrency).fill(null).map(processQueue);
   // 并发
   await Promise.all(workers);
 
@@ -92,7 +92,7 @@ async function main() {
     results.forEach((result, index) => {
       console.log(
         `File ${index + 1}:`,
-        result.success ? result.result : result.error.message
+        result.success ? result.result : result.error.message,
       );
     });
   } catch (error) {
