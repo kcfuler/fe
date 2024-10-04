@@ -9,6 +9,7 @@ class Solution:
 
         while left <= right:
             mid = left + (right - left) // 2
+            # 这里使用 -index ，因为整体index往右移了一位，需要避免越界
             if citations[-mid] >= mid:
                 left = mid + 1
             else:
