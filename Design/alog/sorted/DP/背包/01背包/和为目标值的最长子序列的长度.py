@@ -64,7 +64,7 @@ class Solution:
     # 所以可以直接在一个数组上操作：
     # f = [.......]  # 直接在原地更新
     # 从右向左更新确保我们用到的左边的值都是"旧值"
-    def lengthOfLongestSubsequence(self, nums: List[int], target: int) ->int:
+    def lengthOfLongestSubsequence3(self, nums: List[int], target: int) ->int:
         f = [-inf] * (target + 1)
         f[0] = 0
         for x in nums:
@@ -77,3 +77,19 @@ class Solution:
         ans = f[target]
 
         return ans if ans > 0 else -1
+
+    # 优化遍历范围
+    def lengthOfLongestSubsequence3(self, nums: List[int], target: int) ->int:
+        
+        f = [-inf] * (target + 1)
+        f[0] = 0
+        s = 0
+        for x in nums:
+            s = min(s + x, target)
+            for c in range(s, -1, -1):
+                f[c] = min(f[c], f[c - x] + 1)
+        
+        ans = f[target]
+        return ans if ans > 0 else -1
+
+        
