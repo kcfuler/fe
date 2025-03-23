@@ -1,14 +1,14 @@
 /**
- * DOM Rendering System
+ * DOM渲染系统
  *
- * This module provides functions to connect our reactivity system with the DOM,
- * allowing automatic UI updates when reactive state changes.
+ * 此模块提供函数来连接响应式系统与DOM，
+ * 使UI能在响应式状态变化时自动更新。
  */
 
 import { effect } from "./reactivity";
 
 /**
- * Type for a virtual DOM node or element
+ * 虚拟DOM节点或元素的类型
  */
 type VNode = {
   tag: string;
@@ -18,77 +18,77 @@ type VNode = {
 };
 
 /**
- * Creates and mounts a component to the DOM
+ * 创建组件并将其挂载到DOM
  *
- * @param component - Function that returns a virtual DOM tree
- * @param container - DOM element to mount the component to
+ * @param component - 返回虚拟DOM树的函数
+ * @param container - 要挂载组件的DOM元素
  */
 export function createApp(
   component: () => VNode,
   container: HTMLElement
 ): void {
-  // Use effect to make the component reactive
+  // 使用effect使组件具有响应性
   effect(() => {
-    // Clear the container before each render
+    // 每次渲染前清空容器
     container.innerHTML = "";
 
-    // Create the component's virtual DOM tree
+    // 创建组件的虚拟DOM树
     const vnode = component();
 
-    // Mount the virtual DOM to the real DOM
+    // 将虚拟DOM挂载到真实DOM
     mount(vnode, container);
   });
 }
 
 /**
- * Mounts a virtual DOM node to a real DOM element
+ * 将虚拟DOM节点挂载到真实DOM元素
  *
- * @param vnode - Virtual DOM node to mount
- * @param container - Container to mount the node to
+ * @param vnode - 要挂载的虚拟DOM节点
+ * @param container - 挂载节点的容器
  */
 function mount(vnode: VNode, container: HTMLElement): void {
-  // Create the actual DOM element
+  // 创建实际的DOM元素
   const el = document.createElement(vnode.tag);
   vnode.el = el;
 
-  // Set attributes and properties
+  // 设置属性和特性
   if (vnode.props) {
     for (const key in vnode.props) {
-      // Handle event listeners (e.g., onClick)
+      // 处理事件监听器（例如onClick）
       if (key.startsWith("on") && key.length > 2) {
         const event = key.substring(2).toLowerCase();
         el.addEventListener(event, vnode.props[key]);
       } else {
-        // Set regular attributes
+        // 设置常规属性
         el.setAttribute(key, vnode.props[key]);
       }
     }
   }
 
-  // Handle children
+  // 处理子节点
   if (vnode.children) {
     vnode.children.forEach((child) => {
       if (typeof child === "string") {
-        // Text node
+        // 文本节点
         el.appendChild(document.createTextNode(child));
       } else {
-        // Nested virtual DOM node
+        // 嵌套的虚拟DOM节点
         mount(child, el);
       }
     });
   }
 
-  // Add to the container
+  // 添加到容器
   container.appendChild(el);
 }
 
 /**
- * Creates a virtual DOM node
+ * 创建虚拟DOM节点
  *
- * @param tag - HTML tag name
- * @param props - Element attributes and properties
- * @param children - Child elements or text
- * @returns A virtual DOM node
+ * @param tag - HTML标签名
+ * @param props - 元素属性和特性
+ * @param children - 子元素或文本
+ * @returns 虚拟DOM节点
  */
 export function h(
   tag: string,

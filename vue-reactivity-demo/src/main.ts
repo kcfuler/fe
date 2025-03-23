@@ -1,35 +1,35 @@
 /**
- * Demo Application
+ * 示例应用
  *
- * This file demonstrates how our reactivity system connects to DOM updates.
+ * 本文件演示了响应式系统如何与DOM更新连接。
  */
 
 import { reactive, ref, computed } from "./reactivity";
 import { createApp, h } from "./renderer";
 
-// Main app initialization
+// 主应用初始化
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
   if (!app) return;
 
-  // Create reactive state
+  // 创建响应式状态
   const state = reactive({
     count: 0,
     message: "Hello Vue Reactivity!",
   });
 
-  // Create a reactive reference (for primitives)
+  // 创建响应式引用（用于基本类型值）
   const name = ref("");
 
-  // Create a computed property
+  // 创建计算属性
   const greeting = computed(() => {
     return name.value ? `Hello, ${name.value}!` : "Enter your name above";
   });
 
-  // Define how our component renders
+  // 定义组件渲染方式
   const AppComponent = () => {
     return h("div", {}, [
-      // Display and update message
+      // 显示和更新消息
       h("div", { class: "message" }, [
         h("h2", {}, [state.message]),
         h("input", {
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       ]),
 
-      // Counter example
+      // 计数器示例
       h("div", { class: "counter" }, [
         h("h2", {}, ["Counter: " + state.count]),
         h("div", {}, [
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ]),
       ]),
 
-      // Name input with computed property example
+      // 名称输入与计算属性示例
       h("div", { class: "name-input" }, [
         h("h2", {}, ["Name Input"]),
         h("input", {
@@ -74,34 +74,32 @@ document.addEventListener("DOMContentLoaded", () => {
         h("p", {}, [greeting.value]),
       ]),
 
-      // Explanation section
+      // 说明部分
       h("div", { class: "explanation" }, [
-        h("h2", {}, ["How It Works"]),
+        h("h2", {}, ["工作原理"]),
         h("p", {}, [
-          "This demo shows a simple implementation of a Vue-like reactivity system. " +
-            "When you update the state through user interactions, the DOM updates automatically.",
+          "这个演示展示了Vue响应式系统的简单实现。" +
+            "当你通过用户交互更新状态时，DOM会自动更新。",
         ]),
         h("ol", {}, [
           h("li", {}, [
-            "The reactive() function creates a Proxy around objects to track property access and changes.",
+            "reactive() 函数使用Proxy创建对象的代理，以跟踪属性访问和变化。",
           ]),
           h("li", {}, [
-            "The ref() function makes primitive values reactive by wrapping them in an object.",
+            "ref() 函数通过将基本类型值包装在对象中使其具有响应性。",
           ]),
           h("li", {}, [
-            "The effect() function registers a function to re-run when reactive data changes.",
+            "effect() 函数注册一个函数，在响应式数据变化时重新运行。",
           ]),
           h("li", {}, [
-            "The computed() function creates a value that updates when its dependencies change.",
+            "computed() 函数创建一个值，该值在其依赖项变化时自动更新。",
           ]),
-          h("li", {}, [
-            "Our renderer connects the reactivity system to DOM updates using effect().",
-          ]),
+          h("li", {}, ["我们的渲染器使用effect()将响应式系统连接到DOM更新。"]),
         ]),
       ]),
     ]);
   };
 
-  // Mount our app to the DOM
+  // 将应用挂载到DOM
   createApp(AppComponent, app);
 });

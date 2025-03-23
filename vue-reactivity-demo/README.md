@@ -1,55 +1,55 @@
-# Vue Reactivity Demo
+# Vue 响应式系统演示
 
-This project demonstrates a simplified implementation of Vue's reactivity system in TypeScript, showing how reactive state can automatically update the DOM when values change.
+本项目演示了Vue响应式系统的简化TypeScript实现，展示了响应式状态如何在值变化时自动更新DOM。
 
-## How Reactivity Works
+## 响应式系统原理
 
-Vue's reactivity system is built on several key concepts:
+Vue的响应式系统基于几个关键概念：
 
-### 1. Dependency Tracking
+### 1. 依赖跟踪
 
-When a reactive property is accessed during the execution of an effect (like rendering), the system records that the effect depends on that property.
+当在执行副作用（如渲染）期间访问响应式属性时，系统会记录该副作用依赖于该属性。
 
 ```typescript
-// From reactivity.ts
+// 来自 reactivity.ts
 function track(target: object, key: any): void {
   if (activeEffect) {
-    // Create or get dependency map for this object
+    // 为该对象创建或获取依赖映射
     let depsMap = targetMap.get(target);
     if (!depsMap) {
       targetMap.set(target, (depsMap = new Map()));
     }
 
-    // Create or get dependency set for this property
+    // 为该属性创建或获取依赖集合
     let dep = depsMap.get(key);
     if (!dep) {
       depsMap.set(key, (dep = new Set()));
     }
 
-    // Add the current effect to the dependency set
+    // 将当前副作用添加到依赖集合
     dep.add(activeEffect);
   }
 }
 ```
 
-### 2. Change Detection via Proxy
+### 2. 通过Proxy实现变化检测
 
-Reactive objects are wrapped in JavaScript Proxies that intercept property access and modification:
+响应式对象被包装在JavaScript Proxy中，拦截属性访问和修改：
 
 ```typescript
-// From reactivity.ts
+// 来自 reactivity.ts
 export function reactive<T extends object>(target: T): T {
   const handler: ProxyHandler<T> = {
     get(target, key, receiver) {
       const result = Reflect.get(target, key, receiver);
-      // Track dependencies
+      // 跟踪依赖
       track(target, key);
       return result;
     },
     set(target, key, value, receiver) {
       const oldValue = Reflect.get(target, key, receiver);
       const result = Reflect.set(target, key, value, receiver);
-      // Trigger updates if value changed
+      // 如果值确实变化，触发更新
       if (oldValue !== value) {
         trigger(target, key);
       }
@@ -61,12 +61,12 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-### 3. Effect System
+### 3. 副作用系统
 
-Effects are functions that run initially and then re-run whenever their dependencies change:
+副作用是初始运行并在其依赖项变化时重新运行的函数：
 
 ```typescript
-// From reactivity.ts
+// 来自 reactivity.ts
 export function effect(fn: EffectFn): EffectFn {
   const effectFn = () => {
     activeEffect = effectFn;
@@ -74,18 +74,18 @@ export function effect(fn: EffectFn): EffectFn {
     activeEffect = null;
   };
 
-  // Run immediately
+  // 立即运行
   effectFn();
   return effectFn;
 }
 ```
 
-### 4. DOM Updates
+### 4. DOM更新
 
-The rendering system uses effects to automatically update the DOM when reactive state changes:
+渲染系统使用副作用在响应式状态变化时自动更新DOM：
 
 ```typescript
-// From renderer.ts
+// 来自 renderer.ts
 export function createApp(component: () => VNode, container: HTMLElement): void {
   effect(() => {
     container.innerHTML = '';
@@ -95,33 +95,33 @@ export function createApp(component: () => VNode, container: HTMLElement): void 
 }
 ```
 
-## Running the Demo
+## 运行演示
 
-To run this project:
+要运行此项目：
 
-1. Install dependencies:
+1. 安装依赖：
    ```bash
    npm install
    ```
 
-2. Start the development server:
+2. 启动开发服务器：
    ```bash
    npm run dev
    ```
 
-3. Open your browser to the URL shown in the terminal.
+3. 在浏览器中打开终端显示的URL。
 
-## Demo Features
+## 演示功能
 
-The demo shows several reactivity concepts:
+演示展示了几个响应式概念：
 
-1. **Reactive Objects**: Using `reactive()` to make object properties reactive
-2. **Primitive Values**: Using `ref()` to make primitive values reactive
-3. **Computed Values**: Using `computed()` to create derived values that update when dependencies change
-4. **DOM Binding**: Automatic DOM updates when state changes
+1. **响应式对象**：使用 `reactive()` 使对象属性具有响应性
+2. **基本类型值**：使用 `ref()` 使基本类型值具有响应性
+3. **计算值**：使用 `computed()` 创建依赖项变化时自动更新的派生值
+4. **DOM绑定**：状态变化时的自动DOM更新
 
-## Project Structure
+## 项目结构
 
-- `src/reactivity.ts` - The core reactivity system
-- `src/renderer.ts` - Simple virtual DOM renderer that connects to the reactivity system
-- `src/main.ts` - Demo application with examples 
+- `src/reactivity.ts` - 核心响应式系统
+- `src/renderer.ts` - 简单的虚拟DOM渲染器，连接到响应式系统
+- `src/main.ts` - 带有示例的演示应用 
