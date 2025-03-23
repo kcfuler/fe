@@ -1,0 +1,23 @@
+{
+    "name": "vue-reactivity-demo",
+    "version": "1.0.0",
+    "description": "Demo of Vue's reactivity system with TypeScript",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "keywords": [
+        "vue",
+        "reactivity",
+        "typescript"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^5.0.2",
+        "vite": "^4.4.9"
+    }
+}
