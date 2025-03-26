@@ -25,9 +25,10 @@ type VNode = {
  */
 export function createApp(
   component: () => VNode,
-  container: HTMLElement,
+  container: HTMLElement
 ): void {
   // 使用effect使组件具有响应性
+  // 每次组件内状态变化，都会重新执行effect，直接实现挂载功能
   effect(() => {
     // 每次渲染前清空容器
     container.innerHTML = "";
@@ -93,7 +94,7 @@ function mount(vnode: VNode, container: HTMLElement): void {
 export function h(
   tag: string,
   props?: Record<string, any>,
-  children?: (VNode | string)[],
+  children?: (VNode | string)[]
 ): VNode {
   return {
     tag,
