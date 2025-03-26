@@ -49,14 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
             {
               onClick: () => state.count--,
             },
-            ["-"]
+            ["-"],
           ),
           h(
             "button",
             {
               onClick: () => state.count++,
             },
-            ["+"]
+            ["+"],
           ),
         ]),
       ]),

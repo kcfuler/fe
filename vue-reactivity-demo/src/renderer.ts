@@ -25,7 +25,7 @@ type VNode = {
  */
 export function createApp(
   component: () => VNode,
-  container: HTMLElement
+  container: HTMLElement,
 ): void {
   // 使用effect使组件具有响应性
   effect(() => {
@@ -93,7 +93,7 @@ function mount(vnode: VNode, container: HTMLElement): void {
 export function h(
   tag: string,
   props?: Record<string, any>,
-  children?: (VNode | string)[]
+  children?: (VNode | string)[],
 ): VNode {
   return {
     tag,
