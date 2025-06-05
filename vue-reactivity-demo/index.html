@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue风格模板编译器演示</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .app-container {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #42b883;
+        border-bottom: 2px solid #42b883;
+        padding-bottom: 10px;
+      }
+
+      h2 {
+        color: #35495e;
+        margin-top: 25px;
+      }
+
+      .counter-section,
+      .message-section,
+      .name-section,
+      .conditional,
+      .explanation {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+      }
+
+      .counter {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #42b883;
+        text-align: center;
+        margin: 10px 0;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      button {
+        background-color: #42b883;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #3aa776;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      ol {
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 5px;
+      }
+
+      .error {
+        color: red;
+        padding: 10px;
+        background-color: #ffebee;
+        border-radius: 4px;
+        margin-top: 20px;
+      }
+
+      /* 切换效果 */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      p {
+        animation: fadeIn 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 应用将在这里挂载 -->
+      加载中...
+    </div>
+
+    <!-- 导入我们的应用代码 -->
+    <script type="module">
+      // 使用模板演示应用
+      import "./src/template-demo.ts";
+    </script>
+  </body>
+</html>
